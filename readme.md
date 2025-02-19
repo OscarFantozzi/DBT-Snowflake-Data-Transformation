@@ -6,7 +6,7 @@
 
 # Project XYZ
 
-This repository has documentation in English, and also includes a version in [Portuguese](README.pt.md).
+This repository has documentation in English, and also includes a version in [Portuguese](readme-pt.md).
 
 
 
