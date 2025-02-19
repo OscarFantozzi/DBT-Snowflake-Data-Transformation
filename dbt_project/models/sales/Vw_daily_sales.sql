@@ -1,0 +1,16 @@
+
+SELECT
+    A.DATE,
+    A.STOREID,
+    B.STORE_TYPE,
+    AVG(A.TOTAL_SALES) AS AVG_SALES
+FROM {{ ref('fSales') }} A
+INNER JOIN {{ ref('dSalesChannel') }} B 
+    ON A.ID_SALES_CHANNEL = B.ID_SALES_CHANNEL
+GROUP BY
+    A.DATE,
+    A.STOREID,
+    B.STORE_TYPE
+ORDER BY
+    A.DATE,
+    A.STOREID

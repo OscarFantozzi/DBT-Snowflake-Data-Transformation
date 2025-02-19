@@ -1,0 +1,1356 @@
+QUERY_ID,QUERY_TEXT,DATABASE_ID,DATABASE_NAME,SCHEMA_ID,SCHEMA_NAME,QUERY_TYPE,SESSION_ID,USER_NAME,ROLE_NAME,WAREHOUSE_ID,WAREHOUSE_NAME,WAREHOUSE_SIZE,WAREHOUSE_TYPE,CLUSTER_NUMBER,QUERY_TAG,EXECUTION_STATUS,ERROR_CODE,ERROR_MESSAGE,START_TIME,END_TIME,TOTAL_ELAPSED_TIME,BYTES_SCANNED,PERCENTAGE_SCANNED_FROM_CACHE,BYTES_WRITTEN,BYTES_WRITTEN_TO_RESULT,BYTES_READ_FROM_RESULT,ROWS_PRODUCED,ROWS_INSERTED,ROWS_UPDATED,ROWS_DELETED,ROWS_UNLOADED,BYTES_DELETED,PARTITIONS_SCANNED,PARTITIONS_TOTAL,BYTES_SPILLED_TO_LOCAL_STORAGE,BYTES_SPILLED_TO_REMOTE_STORAGE,BYTES_SENT_OVER_THE_NETWORK,COMPILATION_TIME,EXECUTION_TIME,QUEUED_PROVISIONING_TIME,QUEUED_REPAIR_TIME,QUEUED_OVERLOAD_TIME,TRANSACTION_BLOCKED_TIME,OUTBOUND_DATA_TRANSFER_CLOUD,OUTBOUND_DATA_TRANSFER_REGION,OUTBOUND_DATA_TRANSFER_BYTES,INBOUND_DATA_TRANSFER_CLOUD,INBOUND_DATA_TRANSFER_REGION,INBOUND_DATA_TRANSFER_BYTES,LIST_EXTERNAL_FILES_TIME,CREDITS_USED_CLOUD_SERVICES,RELEASE_VERSION,EXTERNAL_FUNCTION_TOTAL_INVOCATIONS,EXTERNAL_FUNCTION_TOTAL_SENT_ROWS,EXTERNAL_FUNCTION_TOTAL_RECEIVED_ROWS,EXTERNAL_FUNCTION_TOTAL_SENT_BYTES,EXTERNAL_FUNCTION_TOTAL_RECEIVED_BYTES,QUERY_LOAD_PERCENT,IS_CLIENT_GENERATED_STATEMENT,QUERY_ACCELERATION_BYTES_SCANNED,QUERY_ACCELERATION_PARTITIONS_SCANNED,QUERY_ACCELERATION_UPPER_LIMIT_SCALE_FACTOR,TRANSACTION_ID,CHILD_QUERIES_WAIT_TIME,ROLE_TYPE,QUERY_HASH,QUERY_HASH_VERSION,QUERY_PARAMETERIZED_HASH,QUERY_PARAMETERIZED_HASH_VERSION,SECONDARY_ROLE_STATS,ROWS_WRITTEN_TO_RESULT,QUERY_RETRY_TIME,QUERY_RETRY_CAUSE,FAULT_HANDLING_TIME,USER_TYPE,USER_DATABASE_NAME,USER_DATABASE_ID,USER_SCHEMA_NAME,USER_SCHEMA_ID
+01ba7b56-0000-da3a-0001-933e0004f956,"with tables as (
+            select
+        table_catalog as ""table_database"",
+        table_schema as ""table_schema"",
+        table_name as ""table_name"",
+        case
+            when is_dynamic = 'YES' and table_type = 'BASE TABLE' THEN 'DYNAMIC TABLE'
+            else table_type
+        end as ""table_type"",
+        comment as ""table_comment"",
+
+        -- note: this is the _role_ that owns the table
+        table_owner as ""table_owner"",
+
+        'Clustering Key' as ""stats:clustering_key:label"",
+        clustering_key as ""stats:clustering_key:value"",
+        'The key used to cluster this table' as ""stats:clustering_key:description"",
+        (clustering_key is not null) as ""stats:clustering_key:include"",
+
+        'Row Count' as ""stats:row_count:label"",
+        row_count as ""stats:row_count:value"",
+        'An approximate count of rows in this table' as ""stats:row_count:description"",
+        (row_count is not null) as ""stats:row_count:include"",
+
+        'Approximate Size' as ""stats:bytes:label"",
+        bytes as ""stats:bytes:value"",
+        'Approximate size of the table as reported by Snowflake' as ""stats:bytes:description"",
+        (bytes is not null) as ""stats:bytes:include"",
+
+        'Last Modified' as ""stats:last_modified:label"",
+        to_varchar(convert_timezone('UTC', last_altered), 'yyyy-mm-dd HH24:MI'||'UTC') as ""stats:last_modified:value"",
+        'The timestamp for last update/change' as ""stats:last_modified:description"",
+        (last_altered is not null and table_type='BASE TABLE') as ""stats:last_modified:include""
+    from SALES_DW.INFORMATION_SCHEMA.tables
+            where (
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_total_sales_by_channel_and_product' and upper(""table_name"") = upper('Vw_total_sales_by_channel_and_product')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'sales_goals' and upper(""table_name"") = upper('sales_goals')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_daily_sales' and upper(""table_name"") = upper('Vw_daily_sales')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_percent_variation' and upper(""table_name"") = upper('Vw_percent_variation')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_best_selling_products' and upper(""table_name"") = upper('Vw_best_selling_products')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_cum_sales' and upper(""table_name"") = upper('Vw_cum_sales')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'dLocation' and upper(""table_name"") = upper('dLocation')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'fSales' and upper(""table_name"") = upper('fSales')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'dSalesChannel' and upper(""table_name"") = upper('dSalesChannel')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'SCD_HISTORY' and upper(""table_schema"") = upper('SCD_HISTORY')
+
+                    and 
+    ""table_name"" ilike 'store_location_history' and upper(""table_name"") = upper('store_location_history')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'dProduct' and upper(""table_name"") = upper('dProduct')
+
+                )
+            )
+        ),
+        columns as (
+            select
+        table_catalog as ""table_database"",
+        table_schema as ""table_schema"",
+        table_name as ""table_name"",
+
+        column_name as ""column_name"",
+        ordinal_position as ""column_index"",
+        data_type as ""column_type"",
+        comment as ""column_comment""
+    from SALES_DW.INFORMATION_SCHEMA.columns
+            where (
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_total_sales_by_channel_and_product' and upper(""table_name"") = upper('Vw_total_sales_by_channel_and_product')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'sales_goals' and upper(""table_name"") = upper('sales_goals')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_daily_sales' and upper(""table_name"") = upper('Vw_daily_sales')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_percent_variation' and upper(""table_name"") = upper('Vw_percent_variation')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_best_selling_products' and upper(""table_name"") = upper('Vw_best_selling_products')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'CONSUMPTION' and upper(""table_schema"") = upper('CONSUMPTION')
+
+                    and 
+    ""table_name"" ilike 'Vw_cum_sales' and upper(""table_name"") = upper('Vw_cum_sales')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'dLocation' and upper(""table_name"") = upper('dLocation')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'fSales' and upper(""table_name"") = upper('fSales')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'dSalesChannel' and upper(""table_name"") = upper('dSalesChannel')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'SCD_HISTORY' and upper(""table_schema"") = upper('SCD_HISTORY')
+
+                    and 
+    ""table_name"" ilike 'store_location_history' and upper(""table_name"") = upper('store_location_history')
+
+                )
+             or 
+                (
+                    
+    ""table_schema"" ilike 'DBT_PROJECT' and upper(""table_schema"") = upper('DBT_PROJECT')
+
+                    and 
+    ""table_name"" ilike 'dProduct' and upper(""table_name"") = upper('dProduct')
+
+                )
+            )
+        )
+        select *
+    from tables
+    join columns using (""table_database"", ""table_schema"", ""table_name"")
+    order by ""column_index""",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474220618,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:17.161 -0800,2025-02-18 12:06:23.286 -0800,6125,0,0,0,5836,0,52,0,0,0,0,0,4,0,0,0,0,4509,1577,0,0,0,0,,,0,,,0,39,0.000848,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,81eeac6358f98812624cc7ed5c23bd6c,2,81eeac6358f98812624cc7ed5c23bd6c,1,,52,,,,,,,,
+01ba7b56-0000-da0f-0001-933e0004c9ea,"with tables as (
+            select
+        table_catalog as ""table_database"",
+        table_schema as ""table_schema"",
+        table_name as ""table_name"",
+        case
+            when is_dynamic = 'YES' and table_type = 'BASE TABLE' THEN 'DYNAMIC TABLE'
+            else table_type
+        end as ""table_type"",
+        comment as ""table_comment"",
+
+        -- note: this is the _role_ that owns the table
+        table_owner as ""table_owner"",
+
+        'Clustering Key' as ""stats:clustering_key:label"",
+        clustering_key as ""stats:clustering_key:value"",
+        'The key used to cluster this table' as ""stats:clustering_key:description"",
+        (clustering_key is not null) as ""stats:clustering_key:include"",
+
+        'Row Count' as ""stats:row_count:label"",
+        row_count as ""stats:row_count:value"",
+        'An approximate count of rows in this table' as ""stats:row_count:description"",
+        (row_count is not null) as ""stats:row_count:include"",
+
+        'Approximate Size' as ""stats:bytes:label"",
+        bytes as ""stats:bytes:value"",
+        'Approximate size of the table as reported by Snowflake' as ""stats:bytes:description"",
+        (bytes is not null) as ""stats:bytes:include"",
+
+        'Last Modified' as ""stats:last_modified:label"",
+        to_varchar(convert_timezone('UTC', last_altered), 'yyyy-mm-dd HH24:MI'||'UTC') as ""stats:last_modified:value"",
+        'The timestamp for last update/change' as ""stats:last_modified:description"",
+        (last_altered is not null and table_type='BASE TABLE') as ""stats:last_modified:include""
+    from SALES_RAW.INFORMATION_SCHEMA.tables
+            where (
+                (
+                    
+    ""table_schema"" ilike 'PUBLIC' and upper(""table_schema"") = upper('PUBLIC')
+
+                    and 
+    ""table_name"" ilike 'PRODUCT_SALES_PERFORMANCE' and upper(""table_name"") = upper('PRODUCT_SALES_PERFORMANCE')
+
+                )
+            )
+        ),
+        columns as (
+            select
+        table_catalog as ""table_database"",
+        table_schema as ""table_schema"",
+        table_name as ""table_name"",
+
+        column_name as ""column_name"",
+        ordinal_position as ""column_index"",
+        data_type as ""column_type"",
+        comment as ""column_comment""
+    from SALES_RAW.INFORMATION_SCHEMA.columns
+            where (
+                (
+                    
+    ""table_schema"" ilike 'PUBLIC' and upper(""table_schema"") = upper('PUBLIC')
+
+                    and 
+    ""table_name"" ilike 'PRODUCT_SALES_PERFORMANCE' and upper(""table_name"") = upper('PRODUCT_SALES_PERFORMANCE')
+
+                )
+            )
+        )
+        select *
+    from tables
+    join columns using (""table_database"", ""table_schema"", ""table_name"")
+    order by ""column_index""",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474220618,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:14.664 -0800,2025-02-18 12:06:17.062 -0800,2398,0,0,0,2847,0,13,0,0,0,0,0,3,0,0,0,0,1689,685,0,0,0,0,,,0,,,0,24,0.000327,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,14a7a4840d84ca1c1d76853e829419a9,2,14a7a4840d84ca1c1d76853e829419a9,1,,13,,,,,,,,
+01ba7b56-0000-da3a-0001-933e0004f952,show objects in SALES_DW.SCD_HISTORY limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474220614,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:13.216 -0800,2025-02-18 12:06:13.278 -0800,62,0,0,0,136,0,,0,0,0,0,0,0,0,0,0,0,30,32,0,0,0,0,,,0,,,0,0,9e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,d02b9546b991ec5e61d3ef2722516ed0,2,d02b9546b991ec5e61d3ef2722516ed0,1,,1,,,,,,,,
+01ba7b56-0000-da2b-0001-933e0005087a,show objects in SALES_DW.CONSUMPTION limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474220614,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:13.106 -0800,2025-02-18 12:06:13.152 -0800,46,0,0,0,641,0,,0,0,0,0,0,0,0,0,0,0,24,22,0,0,0,0,,,0,,,0,0,7e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,b7addfd413ddb5e1b6cb5ed6c7c6dd53,2,b7addfd413ddb5e1b6cb5ed6c7c6dd53,1,,5,,,,,,,,
+01ba7b56-0000-da0f-0001-933e0004c9e6,show objects in SALES_DW.DBT_PROJECT limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474220614,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:12.993 -0800,2025-02-18 12:06:13.038 -0800,45,0,0,0,610,0,,0,0,0,0,0,0,0,0,0,0,24,21,0,0,0,0,,,0,,,0,0,7e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,0703bcf67298056d4056a5292eef08f9,2,0703bcf67298056d4056a5292eef08f9,1,,5,,,,,,,,
+01ba7b56-0000-da2b-0001-933e00050876,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+select
+    ID_SALES_CHANNEL as unique_field,
+    count(*) as n_records
+
+from SALES_DW.DBT_PROJECT.dSalesChannel
+where ID_SALES_CHANNEL is not null
+group by ID_SALES_CHANNEL
+having count(*) > 1
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:06.727 -0800,2025-02-18 12:06:07.047 -0800,320,87650304,1,0,444,0,1,0,0,0,0,0,22,22,0,0,0,76,244,0,0,0,0,,,0,,,0,0,1.2e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,82d466fa5ff8f011684f413a58e8e384,2,82d466fa5ff8f011684f413a58e8e384,1,,1,,,,,,,,
+01ba7b56-0000-da0f-0001-933e0004c9e2,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+select
+    SKU as unique_field,
+    count(*) as n_records
+
+from SALES_DW.DBT_PROJECT.dProduct
+where SKU is not null
+group by SKU
+having count(*) > 1
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:05.731 -0800,2025-02-18 12:06:06.639 -0800,908,105324544,1,0,449,0,1,0,0,0,0,0,22,22,0,0,0,71,837,0,0,0,0,,,0,,,0,0,1.2e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,7fd9efb2223cd5910e43a67e3d15d0dd,2,7fd9efb2223cd5910e43a67e3d15d0dd,1,,1,,,,,,,,
+01ba7b56-0000-d9fc-0001-933e0005801a,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+select
+    ID_PRODUCT as unique_field,
+    count(*) as n_records
+
+from SALES_DW.DBT_PROJECT.dProduct
+where ID_PRODUCT is not null
+group by ID_PRODUCT
+having count(*) > 1
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:04.763 -0800,2025-02-18 12:06:05.638 -0800,875,105324544,1,0,444,0,1,0,0,0,0,0,22,22,0,0,0,58,817,0,0,0,0,,,0,,,0,0,1e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,76344c49b58c223b9cdbfb252be42209,2,76344c49b58c223b9cdbfb252be42209,1,,1,,,,,,,,
+01ba7b56-0000-da6e-0001-933e000571e2,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+select
+    STORE_ID as unique_field,
+    count(*) as n_records
+
+from SALES_DW.DBT_PROJECT.dLocation
+where STORE_ID is not null
+group by STORE_ID
+having count(*) > 1
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:04.473 -0800,2025-02-18 12:06:04.672 -0800,199,70144,1,0,444,0,1,0,0,0,0,0,8,8,0,0,0,162,37,0,0,0,0,,,0,,,0,0,2.6e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,695071d990c16cfea71ae0327e74822c,2,695071d990c16cfea71ae0327e74822c,1,,1,,,,,,,,
+01ba7b56-0000-da4c-0001-933e000518b2,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      SELECT * 
+FROM SALES_DW.DBT_PROJECT.fSales 
+WHERE TOTAL_SALES = 0
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:04.296 -0800,2025-02-18 12:06:04.356 -0800,60,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,57,3,0,0,0,0,,,0,,,0,0,9e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,d61adafdc9272dbe2d42bb6bc8cd49e3,2,58acd2409d151187f1213e1c5e398e6b,1,,1,,,,,,,,
+01ba7b56-0000-da3a-0001-933e0004f94e,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+with child as (
+    select STORE_ID as from_field
+    from SALES_DW.DBT_PROJECT.fSales
+    where STORE_ID is not null
+),
+
+parent as (
+    select STORE_ID as to_field
+    from SALES_DW.DBT_PROJECT.dLocation
+)
+
+select
+    from_field
+
+from child
+left join parent
+    on child.from_field = parent.to_field
+
+where parent.to_field is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,FAIL,000904,"SQL compilation error: error line 11 at position 11
+invalid identifier 'STORE_ID'",2025-02-18 12:06:04.003 -0800,2025-02-18 12:06:04.031 -0800,28,0,0,0,0,0,,0,0,0,0,0,0,0,0,0,0,28,0,0,0,0,0,,,0,,,0,0,4e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,c3c9b868f65425901cf5fd1d673bce86,2,c3c9b868f65425901cf5fd1d673bce86,1,,0,,,,,,,,
+01ba7b56-0000-da2b-0001-933e00050872,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+with child as (
+    select SKU as from_field
+    from SALES_DW.DBT_PROJECT.fSales
+    where SKU is not null
+),
+
+parent as (
+    select SKU as to_field
+    from SALES_DW.DBT_PROJECT.dProduct
+)
+
+select
+    from_field
+
+from child
+left join parent
+    on child.from_field = parent.to_field
+
+where parent.to_field is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:06:00.175 -0800,2025-02-18 12:06:03.683 -0800,3508,141016096,0.7516684053,0,444,0,1,0,0,0,0,0,36,36,0,0,0,193,3315,0,0,0,0,,,0,,,0,0,3e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,d3fcc208e164bba77081fb1981c0dfa6,2,d3fcc208e164bba77081fb1981c0dfa6,1,,1,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e00058016,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+with child as (
+    select ID_SALES_CHANNEL as from_field
+    from SALES_DW.DBT_PROJECT.fSales
+    where ID_SALES_CHANNEL is not null
+),
+
+parent as (
+    select ID_SALES_CHANNEL as to_field
+    from SALES_DW.DBT_PROJECT.dSalesChannel
+)
+
+select
+    from_field
+
+from child
+left join parent
+    on child.from_field = parent.to_field
+
+where parent.to_field is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:59.486 -0800,2025-02-18 12:06:00.082 -0800,596,90502880,0.9749269416,0,444,0,1,0,0,0,0,0,35,36,0,0,0,211,385,0,0,0,0,,,0,,,0,0,3.3e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,5955bb1fcf8f6c2db8b6bae0f5589b80,2,5955bb1fcf8f6c2db8b6bae0f5589b80,1,,1,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571de,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      -- check if title or brand is null
+SELECT * FROM SALES_DW.DBT_PROJECT.dProduct 
+WHERE TITLE IS NULL OR BRAND IS NULL
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:59.320 -0800,2025-02-18 12:05:59.402 -0800,82,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,60,22,0,0,0,0,,,0,,,0,0,1e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,8d3f921faa532ea70d499cbc98c31576,2,8d3f921faa532ea70d499cbc98c31576,1,,1,,,,,,,,
+01ba7b55-0000-da4c-0001-933e000518ae,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+SELECT *
+FROM SALES_DW.DBT_PROJECT.fSales
+WHERE TOTAL_SALES <= 0
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:59.085 -0800,2025-02-18 12:05:59.229 -0800,144,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,142,2,0,0,0,0,,,0,,,0,0,2.2e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,d43c03c4e74fb6367c3dd1fb68b204ae,2,dbb213ccdebdde2afba284524ca5d463,1,,1,,,,,,,,
+01ba7b55-0000-da3a-0001-933e0004f94a,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select TOTAL_SALES
+from SALES_DW.DBT_PROJECT.fSales
+where TOTAL_SALES is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:58.509 -0800,2025-02-18 12:05:58.997 -0800,488,34844672,0,0,449,0,1,0,0,0,0,0,13,14,0,0,0,210,278,0,0,0,0,,,0,,,0,0,3.3e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,8e01aa18e7006609f08b0be80f50cdb5,2,8e01aa18e7006609f08b0be80f50cdb5,1,,1,,,,,,,,
+01ba7b55-0000-da2b-0001-933e0005086e,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select ID_SALES_CHANNEL
+from SALES_DW.DBT_PROJECT.dSalesChannel
+where ID_SALES_CHANNEL is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:58.087 -0800,2025-02-18 12:05:58.429 -0800,342,87650304,1,0,444,0,1,0,0,0,0,0,22,22,0,0,0,99,243,0,0,0,0,,,0,,,0,0,1.6e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,cc8ca146f50501eb9735778e5d5574ee,2,cc8ca146f50501eb9735778e5d5574ee,1,,1,,,,,,,,
+01ba7b55-0000-da0f-0001-933e0004c9de,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select TITLE
+from SALES_DW.DBT_PROJECT.dProduct
+where TITLE is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:57.839 -0800,2025-02-18 12:05:57.924 -0800,85,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,60,25,0,0,0,0,,,0,,,0,0,1e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,ac79ce0cee40cd65938265358ede4739,2,ac79ce0cee40cd65938265358ede4739,1,,1,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e00058012,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select SKU
+from SALES_DW.DBT_PROJECT.dProduct
+where SKU is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:57.667 -0800,2025-02-18 12:05:57.739 -0800,72,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,50,22,0,0,0,0,,,0,,,0,0,8e-06,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,88d20f1064a625980d486935d954dd0b,2,88d20f1064a625980d486935d954dd0b,1,,1,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571da,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select ID_PRODUCT
+from SALES_DW.DBT_PROJECT.dProduct
+where ID_PRODUCT is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:56.522 -0800,2025-02-18 12:05:57.584 -0800,1062,105328064,0.3451257207,0,444,0,1,0,0,0,0,0,22,22,0,0,0,104,958,0,0,0,0,,,0,,,0,0,1.7e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,34c0cbab1dcfc091e141b6156f56d8c7,2,34c0cbab1dcfc091e141b6156f56d8c7,1,,1,,,,,,,,
+01ba7b55-0000-da4c-0001-933e000518aa,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select BRAND
+from SALES_DW.DBT_PROJECT.dProduct
+where BRAND is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:56.314 -0800,2025-02-18 12:05:56.418 -0800,104,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,78,26,0,0,0,0,,,0,,,0,0,1.3e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,01518e3a98b685efe5085b9e09b286a5,2,01518e3a98b685efe5085b9e09b286a5,1,,1,,,,,,,,
+01ba7b55-0000-da3a-0001-933e0004f946,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select STORE_ID
+from SALES_DW.DBT_PROJECT.dLocation
+where STORE_ID is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:55.698 -0800,2025-02-18 12:05:56.217 -0800,519,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,387,132,0,0,0,0,,,0,,,0,0,6.6e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,c1182ff58e0988c5b72e2c0e80f37a28,2,c1182ff58e0988c5b72e2c0e80f37a28,1,,1,,,,,,,,
+01ba7b55-0000-da2b-0001-933e0005086a,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select STATE
+from SALES_DW.DBT_PROJECT.dLocation
+where STATE is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:55.147 -0800,2025-02-18 12:05:55.618 -0800,471,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,329,142,0,0,0,0,,,0,,,0,0,5.8e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,4a8b4e8f2325b33ae92f6f9f18bd4e54,2,4a8b4e8f2325b33ae92f6f9f18bd4e54,1,,1,,,,,,,,
+01ba7b55-0000-da0f-0001-933e0004c9da,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select CITY
+from SALES_DW.DBT_PROJECT.dLocation
+where CITY is null
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:54.968 -0800,2025-02-18 12:05:55.042 -0800,74,0,0,0,444,0,1,0,0,0,0,0,0,0,0,0,0,47,27,0,0,0,0,,,0,,,0,0,8e-06,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,a09b911a7f2bce27737a5458126b0078,2,a09b911a7f2bce27737a5458126b0078,1,,1,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e0005800e,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+
+
+
+
+
+with validation_errors as (
+
+    select
+        STOREID, DATE, SKU
+    from SALES_RAW.PUBLIC.PRODUCT_SALES_PERFORMANCE
+    group by STOREID, DATE, SKU
+    having count(*) > 1
+
+)
+
+select *
+from validation_errors
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:52.329 -0800,2025-02-18 12:05:54.881 -0800,2552,51420128,0.776321677,0,448,0,1,0,0,0,0,0,22,22,0,0,0,290,2262,0,0,0,0,,,0,,,0,0,5.7e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,630a171a40e5714ea668866bff04fc01,2,630a171a40e5714ea668866bff04fc01,1,,1,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571d6,"select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+with all_values as (
+
+    select
+        STORE_TYPE as value_field,
+        count(*) as n_records
+
+    from SALES_DW.DBT_PROJECT.dSalesChannel
+    group by STORE_TYPE
+
+)
+
+select *
+from all_values
+where value_field not in (
+    'ONLINE','OFFLINE'
+)
+
+
+
+      
+    ) dbt_internal_test",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474281646,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:51.607 -0800,2025-02-18 12:05:52.176 -0800,569,87653824,0.004526168761,0,444,0,1,0,0,0,0,0,22,22,0,0,0,145,424,0,0,0,0,,,0,,,0,0,2.3e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,b20e23843c918d1d9afbf74b5e3eb381,2,b20e23843c918d1d9afbf74b5e3eb381,1,,1,,,,,,,,
+01ba7b55-0000-da2b-0001-933e00050866,show objects in SALES_DW.CONSUMPTION limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474289690,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:50.950 -0800,2025-02-18 12:05:51.009 -0800,59,0,0,0,641,0,,0,0,0,0,0,0,0,0,0,0,23,36,0,0,0,0,,,0,,,0,0,9e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,b7addfd413ddb5e1b6cb5ed6c7c6dd53,2,b7addfd413ddb5e1b6cb5ed6c7c6dd53,1,,5,,,,,,,,
+01ba7b55-0000-da0f-0001-933e0004c9d6,show objects in SALES_DW.DBT_PROJECT limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474289690,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:50.828 -0800,2025-02-18 12:05:50.878 -0800,50,0,0,0,610,0,,0,0,0,0,0,0,0,0,0,0,25,25,0,0,0,0,,,0,,,0,0,8e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,0703bcf67298056d4056a5292eef08f9,2,0703bcf67298056d4056a5292eef08f9,1,,5,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e0005800a,show objects in SALES_DW.SCD_HISTORY limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474289690,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:50.699 -0800,2025-02-18 12:05:50.744 -0800,45,0,0,0,136,0,,0,0,0,0,0,0,0,0,0,0,25,20,0,0,0,0,,,0,,,0,0,7e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,d02b9546b991ec5e61d3ef2722516ed0,2,d02b9546b991ec5e61d3ef2722516ed0,1,,1,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571d2,COMMIT,26,SALES_DW,35,DBT_PROJECT,COMMIT,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:44.372 -0800,2025-02-18 12:05:44.556 -0800,184,0,0,0,36,0,,0,0,0,0,0,0,0,0,0,0,29,155,0,0,0,0,,,0,,,0,0,2.8e-05,9.2.8,0,0,0,0,0,,false,0,0,0,1739909143351000000,0,ROLE,fcbf3ab468c1e84dea95bfce429aa03e,2,fcbf3ab468c1e84dea95bfce429aa03e,1,,1,,,,,,,,
+01ba7b55-0000-da4c-0001-933e000518a6,"merge into ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY"" as DBT_INTERNAL_DEST
+    using ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY__dbt_tmp"" as DBT_INTERNAL_SOURCE
+    on DBT_INTERNAL_SOURCE.dbt_scd_id = DBT_INTERNAL_DEST.dbt_scd_id
+
+    when matched
+     
+       and DBT_INTERNAL_DEST.dbt_valid_to is null
+     
+     and DBT_INTERNAL_SOURCE.dbt_change_type in ('update', 'delete')
+        then update
+        set dbt_valid_to = DBT_INTERNAL_SOURCE.dbt_valid_to
+
+    when not matched
+     and DBT_INTERNAL_SOURCE.dbt_change_type = 'insert'
+        then insert (""STORE_ID"", ""ZIP"", ""CITY"", ""STATE"", ""ADDRESS"", ""DBT_UPDATED_AT"", ""DBT_VALID_FROM"", ""DBT_VALID_TO"", ""DBT_SCD_ID"")
+        values (""STORE_ID"", ""ZIP"", ""CITY"", ""STATE"", ""ADDRESS"", ""DBT_UPDATED_AT"", ""DBT_VALID_FROM"", ""DBT_VALID_TO"", ""DBT_SCD_ID"")
+
+;",26,SALES_DW,35,DBT_PROJECT,MERGE,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:43.451 -0800,2025-02-18 12:05:44.299 -0800,848,202752,0.9848484848,99840,29,0,1523,1,1,0,0,0,4,5,0,0,0,356,492,0,0,0,0,,,0,,,0,0,7.9e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,1739909143351000000,0,ROLE,e82611d7931631cc9e86499f7325815d,2,e82611d7931631cc9e86499f7325815d,1,,1,,,,,,,,
+01ba7b55-0000-da3a-0001-933e0004f942,BEGIN,26,SALES_DW,35,DBT_PROJECT,BEGIN_TRANSACTION,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:43.323 -0800,2025-02-18 12:05:43.377 -0800,54,0,0,0,36,0,,0,0,0,0,0,0,0,0,0,0,21,33,0,0,0,0,,,0,,,0,0,6e-06,9.2.8,0,0,0,0,0,,false,0,0,0,1739909143351000000,0,ROLE,05b6546527f80264b627147f7da22e93,2,05b6546527f80264b627147f7da22e93,1,,1,,,,,,,,
+01ba7b55-0000-da2b-0001-933e00050862,"select * from (
+        select to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_snapshot_time
+    ) as __dbt_sbq
+    where false
+    limit 0",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:43.231 -0800,2025-02-18 12:05:43.251 -0800,20,0,0,0,0,0,,0,0,0,0,0,0,0,0,0,0,19,1,0,0,0,0,,,0,,,0,0,3e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,a667926585d966e3a9647bcdbf1832d2,2,a667926585d966e3a9647bcdbf1832d2,1,,0,,,,,,,,
+01ba7b55-0000-da0f-0001-933e0004c9d2,"select * from (
+        
+    
+    with snapshot_query as (
+
+        
+
+
+
+SELECT * FROM SALES_DW.DBT_PROJECT.dLocation  
+
+
+    ),
+
+    snapshotted_data as (
+
+        select *, 
+    
+        STORE_ID as dbt_unique_key
+    
+
+        from ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY""
+        where
+            
+                dbt_valid_to is null
+            
+
+    ),
+
+    insertions_source_data as (
+
+        select *, 
+    
+        STORE_ID as dbt_unique_key
+    
+,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_updated_at,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_valid_from,
+            
+  
+  coalesce(nullif(to_timestamp_ntz(convert_timezone('UTC', current_timestamp())), to_timestamp_ntz(convert_timezone('UTC', current_timestamp()))), null)
+  as dbt_valid_to
+,
+            md5(coalesce(cast(STORE_ID as varchar ), '')
+         || '|' || coalesce(cast(to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as varchar ), '')
+        ) as dbt_scd_id
+
+        from snapshot_query
+    ),
+
+    updates_source_data as (
+
+        select *, 
+    
+        STORE_ID as dbt_unique_key
+    
+,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_updated_at,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_valid_from,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_valid_to
+
+        from snapshot_query
+    ),
+
+    insertions as (
+
+        select
+            'insert' as dbt_change_type,
+            source_data.*
+
+        from insertions_source_data as source_data
+        left outer join snapshotted_data
+            on 
+    
+        snapshotted_data.dbt_unique_key = source_data.dbt_unique_key
+    
+
+            where 
+    
+        snapshotted_data.dbt_unique_key is null
+    
+
+            or (
+    
+        snapshotted_data.dbt_unique_key is not null
+    
+ and ((snapshotted_data.""ADDRESS"" != source_data.""ADDRESS""
+        or
+        (
+            ((snapshotted_data.""ADDRESS"" is null) and not (source_data.""ADDRESS"" is null))
+            or
+            ((not snapshotted_data.""ADDRESS"" is null) and (source_data.""ADDRESS"" is null))
+        )))
+
+        )
+
+    ),
+
+    updates as (
+
+        select
+            'update' as dbt_change_type,
+            source_data.*,
+            snapshotted_data.dbt_scd_id
+
+        from updates_source_data as source_data
+        join snapshotted_data
+            on 
+    
+        snapshotted_data.dbt_unique_key = source_data.dbt_unique_key
+    
+
+        where (
+            (snapshotted_data.""ADDRESS"" != source_data.""ADDRESS""
+        or
+        (
+            ((snapshotted_data.""ADDRESS"" is null) and not (source_data.""ADDRESS"" is null))
+            or
+            ((not snapshotted_data.""ADDRESS"" is null) and (source_data.""ADDRESS"" is null))
+        ))
+        )
+    )
+
+    select * from insertions
+    union all
+    select * from updates
+
+    ) as __dbt_sbq
+    where false
+    limit 0",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:43.028 -0800,2025-02-18 12:05:43.162 -0800,134,0,0,0,0,0,,0,0,0,0,0,0,0,0,0,0,102,32,0,0,0,0,,,0,,,0,0,1.6e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,8d03bd7c638a1a4ac3622e2568e4e591,2,8d03bd7c638a1a4ac3622e2568e4e591,1,,0,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e00058006,"describe table ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY__dbt_tmp""",26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:42.898 -0800,2025-02-18 12:05:42.941 -0800,43,0,0,0,925,0,,0,0,0,0,0,0,0,0,0,0,38,5,0,0,0,0,,,0,,,0,0,6e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,97d4f72e04f215189c34250740e8cd16,2,97d4f72e04f215189c34250740e8cd16,1,,11,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571ce,"describe table ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY""",26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:42.803 -0800,2025-02-18 12:05:42.829 -0800,26,0,0,0,751,0,,0,0,0,0,0,0,0,0,0,0,24,2,0,0,0,0,,,0,,,0,0,4e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,1317d97af0bd0937e6f613db8e8f30c5,2,1317d97af0bd0937e6f613db8e8f30c5,1,,9,,,,,,,,
+01ba7b55-0000-da4c-0001-933e000518a2,"describe table ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY__dbt_tmp""",26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:42.683 -0800,2025-02-18 12:05:42.719 -0800,36,0,0,0,925,0,,0,0,0,0,0,0,0,0,0,0,31,5,0,0,0,0,,,0,,,0,0,5e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,97d4f72e04f215189c34250740e8cd16,2,97d4f72e04f215189c34250740e8cd16,1,,11,,,,,,,,
+01ba7b55-0000-da3a-0001-933e0004f93e,"describe table ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY""",26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:42.570 -0800,2025-02-18 12:05:42.598 -0800,28,0,0,0,751,0,,0,0,0,0,0,0,0,0,0,0,27,1,0,0,0,0,,,0,,,0,0,4e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,1317d97af0bd0937e6f613db8e8f30c5,2,1317d97af0bd0937e6f613db8e8f30c5,1,,9,,,,,,,,
+01ba7b55-0000-da2b-0001-933e0005085e,"describe table ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY__dbt_tmp""",26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:42.447 -0800,2025-02-18 12:05:42.485 -0800,38,0,0,0,925,0,,0,0,0,0,0,0,0,0,0,0,33,5,0,0,0,0,,,0,,,0,0,6e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,97d4f72e04f215189c34250740e8cd16,2,97d4f72e04f215189c34250740e8cd16,1,,11,,,,,,,,
+01ba7b55-0000-da0f-0001-933e0004c9ce,"create or replace temporary table ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY__dbt_tmp""
+         as
+        (
+    
+    with snapshot_query as (
+
+        
+
+
+
+SELECT * FROM SALES_DW.DBT_PROJECT.dLocation  
+
+
+    ),
+
+    snapshotted_data as (
+
+        select *, 
+    
+        STORE_ID as dbt_unique_key
+    
+
+        from ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY""
+        where
+            
+                dbt_valid_to is null
+            
+
+    ),
+
+    insertions_source_data as (
+
+        select *, 
+    
+        STORE_ID as dbt_unique_key
+    
+,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_updated_at,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_valid_from,
+            
+  
+  coalesce(nullif(to_timestamp_ntz(convert_timezone('UTC', current_timestamp())), to_timestamp_ntz(convert_timezone('UTC', current_timestamp()))), null)
+  as dbt_valid_to
+,
+            md5(coalesce(cast(STORE_ID as varchar ), '')
+         || '|' || coalesce(cast(to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as varchar ), '')
+        ) as dbt_scd_id
+
+        from snapshot_query
+    ),
+
+    updates_source_data as (
+
+        select *, 
+    
+        STORE_ID as dbt_unique_key
+    
+,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_updated_at,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_valid_from,
+            to_timestamp_ntz(convert_timezone('UTC', current_timestamp())) as dbt_valid_to
+
+        from snapshot_query
+    ),
+
+    insertions as (
+
+        select
+            'insert' as dbt_change_type,
+            source_data.*
+
+        from insertions_source_data as source_data
+        left outer join snapshotted_data
+            on 
+    
+        snapshotted_data.dbt_unique_key = source_data.dbt_unique_key
+    
+
+            where 
+    
+        snapshotted_data.dbt_unique_key is null
+    
+
+            or (
+    
+        snapshotted_data.dbt_unique_key is not null
+    
+ and ((snapshotted_data.""ADDRESS"" != source_data.""ADDRESS""
+        or
+        (
+            ((snapshotted_data.""ADDRESS"" is null) and not (source_data.""ADDRESS"" is null))
+            or
+            ((not snapshotted_data.""ADDRESS"" is null) and (source_data.""ADDRESS"" is null))
+        )))
+
+        )
+
+    ),
+
+    updates as (
+
+        select
+            'update' as dbt_change_type,
+            source_data.*,
+            snapshotted_data.dbt_scd_id
+
+        from updates_source_data as source_data
+        join snapshotted_data
+            on 
+    
+        snapshotted_data.dbt_unique_key = source_data.dbt_unique_key
+    
+
+        where (
+            (snapshotted_data.""ADDRESS"" != source_data.""ADDRESS""
+        or
+        (
+            ((snapshotted_data.""ADDRESS"" is null) and not (source_data.""ADDRESS"" is null))
+            or
+            ((not snapshotted_data.""ADDRESS"" is null) and (source_data.""ADDRESS"" is null))
+        ))
+        )
+    )
+
+    select * from insertions
+    union all
+    select * from updates
+
+        );",26,SALES_DW,35,DBT_PROJECT,CREATE_TABLE_AS_SELECT,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:41.132 -0800,2025-02-18 12:05:42.367 -0800,1235,166400,0,4096,67,0,2,2,0,0,0,0,9,10,0,0,0,390,845,0,0,0,0,,,0,,,0,0,0.000103,9.2.8,0,0,0,0,0,100,false,0,0,0,1739909141551000000,0,ROLE,18e0774448a01a72eb53caf8777e1eff,2,18e0774448a01a72eb53caf8777e1eff,1,,1,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e00047002,"describe table ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY""",26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:40.976 -0800,2025-02-18 12:05:41.001 -0800,25,0,0,0,751,0,,0,0,0,0,0,0,0,0,0,0,24,1,0,0,0,0,,,0,,,0,0,4e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,1317d97af0bd0937e6f613db8e8f30c5,2,1317d97af0bd0937e6f613db8e8f30c5,1,,9,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571ca,"describe table ""SALES_DW"".""SCD_HISTORY"".""STORE_LOCATION_HISTORY""",26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:40.876 -0800,2025-02-18 12:05:40.909 -0800,33,0,0,0,751,0,,0,0,0,0,0,0,0,0,0,0,31,2,0,0,0,0,,,0,,,0,0,5e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,1317d97af0bd0937e6f613db8e8f30c5,2,1317d97af0bd0937e6f613db8e8f30c5,1,,9,,,,,,,,
+01ba7b55-0000-da4c-0001-933e0005189e,"select * from (
+        select ADDRESS from (
+                
+
+
+
+SELECT * FROM SALES_DW.DBT_PROJECT.dLocation  
+
+            ) subq
+    ) as __dbt_sbq
+    where false
+    limit 0",26,SALES_DW,35,DBT_PROJECT,SELECT,443369474257090,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:40.268 -0800,2025-02-18 12:05:40.736 -0800,468,0,0,0,0,0,,0,0,0,0,0,0,0,0,0,0,342,126,0,0,0,0,,,0,,,0,0,5.9e-05,9.2.8,0,0,0,0,0,100,false,0,0,0,0,0,ROLE,810bc700c58d6d73f3e6f39849f985e3,2,810bc700c58d6d73f3e6f39849f985e3,1,,0,,,,,,,,
+01ba7b55-0000-da4c-0001-933e0005189a,show objects in SALES_DW.CONSUMPTION limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474245030,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:39.768 -0800,2025-02-18 12:05:39.828 -0800,60,0,0,0,641,0,,0,0,0,0,0,0,0,0,0,0,27,33,0,0,0,0,,,0,,,0,0,9e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,b7addfd413ddb5e1b6cb5ed6c7c6dd53,2,b7addfd413ddb5e1b6cb5ed6c7c6dd53,1,,5,,,,,,,,
+01ba7b55-0000-da3a-0001-933e0004f93a,show objects in SALES_DW.SCD_HISTORY limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474245030,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:39.620 -0800,2025-02-18 12:05:39.685 -0800,65,0,0,0,136,0,,0,0,0,0,0,0,0,0,0,0,33,32,0,0,0,0,,,0,,,0,0,1e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,d02b9546b991ec5e61d3ef2722516ed0,2,d02b9546b991ec5e61d3ef2722516ed0,1,,1,,,,,,,,
+01ba7b55-0000-da2b-0001-933e0005085a,show objects in SALES_DW.DBT_PROJECT limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474245030,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:39.476 -0800,2025-02-18 12:05:39.534 -0800,58,0,0,0,610,0,,0,0,0,0,0,0,0,0,0,0,24,34,0,0,0,0,,,0,,,0,0,9e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,0703bcf67298056d4056a5292eef08f9,2,0703bcf67298056d4056a5292eef08f9,1,,5,,,,,,,,
+01ba7b55-0000-da4c-0001-933e00051896,"show terse schemas in database SALES_DW
+    limit 10000",26,SALES_DW,35,DBT_PROJECT,SHOW,443369474257086,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:38.923 -0800,2025-02-18 12:05:38.961 -0800,38,0,0,0,271,0,,0,0,0,0,0,0,0,0,0,0,31,7,0,0,0,0,,,0,,,0,0,6e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,7c3bc0ae02aebbb983de7d1d895682ed,2,7c3bc0ae02aebbb983de7d1d895682ed,1,,5,,,,,,,,
+01ba7b55-0000-da4c-0001-933e00051892,"create or replace   view SALES_DW.CONSUMPTION.Vw_total_sales_by_channel_and_product
+  
+   as (
+    WITH sales_data AS (
+    SELECT
+        A.ID_PRODUCT,
+        A.ID_SALES_CHANNEL,
+        B.STORE_TYPE,
+        A.TOTAL_SALES
+    FROM SALES_DW.DBT_PROJECT.fSales A
+    INNER JOIN SALES_DW.DBT_PROJECT.dSalesChannel B
+        ON A.ID_SALES_CHANNEL = B.ID_SALES_CHANNEL
+    INNER JOIN SALES_DW.DBT_PROJECT.dProduct C
+        ON A.ID_PRODUCT = C.ID_PRODUCT
+)
+
+SELECT
+    ID_PRODUCT,
+    STORE_TYPE,
+    SUM(TOTAL_SALES) AS TOTAL_SALES
+FROM sales_data
+GROUP BY
+    ID_PRODUCT,
+    STORE_TYPE
+ORDER BY
+    ID_PRODUCT
+  );",26,SALES_DW,35,DBT_PROJECT,CREATE_VIEW,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:32.040 -0800,2025-02-18 12:05:32.268 -0800,228,0,0,0,68,0,,0,0,0,0,0,0,0,0,0,0,124,104,0,0,0,0,,,0,,,0,0,3.2e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,078dec3fdc19b9fc50281861d6e0ab0f,2,078dec3fdc19b9fc50281861d6e0ab0f,1,,1,,,,,,,,
+01ba7b55-0000-da3a-0001-933e0004f936,"create or replace   view SALES_DW.CONSUMPTION.Vw_percent_variation
+  
+   as (
+    WITH sku_table AS (
+    SELECT
+        B.ID_PRODUCT,
+        C.STORE_TYPE,
+        SUM(A.TOTAL_SALES) AS TOTAL_SALES,
+        LAG(SUM(A.TOTAL_SALES)) OVER(PARTITION BY B.ID_PRODUCT ORDER BY C.STORE_TYPE) AS previous_sku,
+        CASE 
+            WHEN C.STORE_TYPE = 'ONLINE' THEN SUM(A.TOTAL_SALES)
+            ELSE NULL
+        END AS ACTUAL_ONLINE
+    FROM SALES_DW.DBT_PROJECT.fSales A
+    INNER JOIN SALES_DW.DBT_PROJECT.dProduct B
+        ON A.ID_PRODUCT = B.ID_PRODUCT
+    INNER JOIN SALES_DW.DBT_PROJECT.dSalesChannel C
+        ON C.ID_SALES_CHANNEL = A.ID_SALES_CHANNEL
+    GROUP BY
+        B.ID_PRODUCT,
+        C.STORE_TYPE
+)
+
+SELECT
+    S.ID_PRODUCT,
+    S.STORE_TYPE,
+    S.TOTAL_SALES,
+    ROUND((S.ACTUAL_ONLINE - S.PREVIOUS_SKU) / S.PREVIOUS_SKU * 100, 2) AS PERCENTAGE_VAR
+FROM sku_table S
+  );",26,SALES_DW,35,DBT_PROJECT,CREATE_VIEW,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:31.660 -0800,2025-02-18 12:05:31.957 -0800,297,0,0,0,51,0,,0,0,0,0,0,0,0,0,0,0,169,128,0,0,0,0,,,0,,,0,0,4.4e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,524a1c7f6a59d9fb91da51e83fa5bc03,2,524a1c7f6a59d9fb91da51e83fa5bc03,1,,1,,,,,,,,
+01ba7b55-0000-da2b-0001-933e00050856,"create or replace   view SALES_DW.CONSUMPTION.Vw_daily_sales
+  
+   as (
+    SELECT
+    A.DATE,
+    A.STOREID,
+    B.STORE_TYPE,
+    AVG(A.TOTAL_SALES) AS AVG_SALES
+FROM SALES_DW.DBT_PROJECT.fSales A
+INNER JOIN SALES_DW.DBT_PROJECT.dSalesChannel B 
+    ON A.ID_SALES_CHANNEL = B.ID_SALES_CHANNEL
+GROUP BY
+    A.DATE,
+    A.STOREID,
+    B.STORE_TYPE
+ORDER BY
+    A.DATE,
+    A.STOREID
+  );",26,SALES_DW,35,DBT_PROJECT,CREATE_VIEW,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:31.389 -0800,2025-02-18 12:05:31.580 -0800,191,0,0,0,45,0,,0,0,0,0,0,0,0,0,0,0,86,105,0,0,0,0,,,0,,,0,0,2.7e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,eb2686d70afa85fe28bf90b7e973041e,2,eb2686d70afa85fe28bf90b7e973041e,1,,1,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e00046ffe,"create or replace   view SALES_DW.CONSUMPTION.Vw_cum_sales
+  
+   as (
+    SELECT
+    A.DATE,
+    A.STOREID,
+    B.STATE,
+    C.BRAND,
+    A.TOTAL_SALES,
+    SUM(A.TOTAL_SALES) OVER(
+        PARTITION BY A.STOREID
+        ORDER BY A.DATE
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS CUM_SUM
+FROM SALES_DW.DBT_PROJECT.fSales A
+LEFT JOIN SALES_DW.DBT_PROJECT.dLocation B 
+    ON A.STOREID = B.STORE_ID
+LEFT JOIN SALES_DW.DBT_PROJECT.dProduct C 
+    ON C.ID_PRODUCT = A.ID_PRODUCT
+  );",26,SALES_DW,35,DBT_PROJECT,CREATE_VIEW,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:31.078 -0800,2025-02-18 12:05:31.292 -0800,214,0,0,0,43,0,,0,0,0,0,0,0,0,0,0,0,107,107,0,0,0,0,,,0,,,0,0,3.2e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,5b279f064a7e333d6a41a826d4c70398,2,5b279f064a7e333d6a41a826d4c70398,1,,1,,,,,,,,
+01ba7b55-0000-da4c-0001-933e0005188e,"create or replace   view SALES_DW.CONSUMPTION.Vw_best_selling_products
+  
+   as (
+    WITH ranked_sales AS (
+    SELECT
+        B.STATE,
+        B.CITY,
+        C.ID_PRODUCT,
+        SUM(A.TOTAL_SALES) AS TOTAL_SALES,
+        DENSE_RANK() OVER( PARTITION BY B.STATE, B.CITY ORDER BY SUM(A.TOTAL_SALES) DESC ) AS RANKING
+    FROM SALES_DW.DBT_PROJECT.fSales A
+    LEFT JOIN SALES_DW.DBT_PROJECT.dLocation B
+        ON A.STOREID = B.STORE_ID
+    LEFT JOIN SALES_DW.DBT_PROJECT.dProduct C
+        ON C.ID_PRODUCT = A.ID_PRODUCT
+    GROUP BY
+        C.ID_PRODUCT,
+        B.STATE,
+        B.CITY
+)
+
+SELECT
+    STATE,
+    CITY,
+    ID_PRODUCT,
+    TOTAL_SALES,
+    RANKING
+FROM ranked_sales
+WHERE RANKING <= 10
+ORDER BY
+    STATE,
+    CITY,
+    RANKING
+  );",26,SALES_DW,35,DBT_PROJECT,CREATE_VIEW,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:30.719 -0800,2025-02-18 12:05:30.990 -0800,271,0,0,0,55,0,,0,0,0,0,0,0,0,0,0,0,151,120,0,0,0,0,,,0,,,0,0,3.8e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,c001b1dbf724bf5fb6583b17c6eae7dc,2,c001b1dbf724bf5fb6583b17c6eae7dc,1,,1,,,,,,,,
+01ba7b55-0000-da3a-0001-933e0004f932,drop view if exists SALES_DW.DBT_PROJECT.fSales__dbt_tmp cascade,26,SALES_DW,35,DBT_PROJECT,DROP,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:30.552 -0800,2025-02-18 12:05:30.619 -0800,67,0,0,0,41,0,,0,0,0,0,0,0,0,0,0,0,27,40,0,0,0,0,,,0,,,0,0,1e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,eef55aea57ebd6773a418b56028883ce,2,eef55aea57ebd6773a418b56028883ce,1,,1,,,,,,,,
+01ba7b55-0000-da2b-0001-933e00050852,COMMIT,26,SALES_DW,35,DBT_PROJECT,COMMIT,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:30.303 -0800,2025-02-18 12:05:30.452 -0800,149,0,0,0,36,0,,0,0,0,0,0,0,0,0,0,0,23,126,0,0,0,0,,,0,,,0,0,2.2e-05,9.2.8,0,0,0,0,0,,false,0,0,0,1739909128275000000,0,ROLE,fcbf3ab468c1e84dea95bfce429aa03e,2,fcbf3ab468c1e84dea95bfce429aa03e,1,,1,,,,,,,,
+01ba7b55-0000-da0f-0001-933e0004c9ca,"merge into SALES_DW.DBT_PROJECT.fSales as DBT_INTERNAL_DEST
+        using SALES_DW.DBT_PROJECT.fSales__dbt_tmp as DBT_INTERNAL_SOURCE
+        on (
+                    DBT_INTERNAL_SOURCE.SKU = DBT_INTERNAL_DEST.SKU
+                ) and (
+                    DBT_INTERNAL_SOURCE.STOREID = DBT_INTERNAL_DEST.STOREID
+                ) and (
+                    DBT_INTERNAL_SOURCE.DATE = DBT_INTERNAL_DEST.DATE
+                ) and (
+                    DBT_INTERNAL_SOURCE.TOTAL_SALES = DBT_INTERNAL_DEST.TOTAL_SALES
+                )
+
+    
+    when matched then update set
+        ""SKU"" = DBT_INTERNAL_SOURCE.""SKU"",""STOREID"" = DBT_INTERNAL_SOURCE.""STOREID"",""ID_PRODUCT"" = DBT_INTERNAL_SOURCE.""ID_PRODUCT"",""DATE"" = DBT_INTERNAL_SOURCE.""DATE"",""QUANTITY"" = DBT_INTERNAL_SOURCE.""QUANTITY"",""TOTAL_SALES"" = DBT_INTERNAL_SOURCE.""TOTAL_SALES"",""STORE_TYPE"" = DBT_INTERNAL_SOURCE.""STORE_TYPE"",""ID_SALES_CHANNEL"" = DBT_INTERNAL_SOURCE.""ID_SALES_CHANNEL""
+    
+
+    when not matched then insert
+        (""SKU"", ""STOREID"", ""ID_PRODUCT"", ""DATE"", ""QUANTITY"", ""TOTAL_SALES"", ""STORE_TYPE"", ""ID_SALES_CHANNEL"")
+    values
+        (""SKU"", ""STOREID"", ""ID_PRODUCT"", ""DATE"", ""QUANTITY"", ""TOTAL_SALES"", ""STORE_TYPE"", ""ID_SALES_CHANNEL"")
+
+;",26,SALES_DW,35,DBT_PROJECT,MERGE,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:28.356 -0800,2025-02-18 12:05:30.234 -0800,1878,3072,0,3072,29,0,12,0,0,0,0,0,1,14,0,0,0,582,1296,0,0,0,0,,,0,,,0,0,0.00012,9.2.8,0,0,0,0,0,100,false,0,0,0,1739909128275000000,0,ROLE,1e427ab49a8d6a548ebb1eff13f9ac35,2,1e427ab49a8d6a548ebb1eff13f9ac35,1,,1,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e00046ffa,begin;,26,SALES_DW,35,DBT_PROJECT,BEGIN_TRANSACTION,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:28.250 -0800,2025-02-18 12:05:28.296 -0800,46,0,0,0,36,0,,0,0,0,0,0,0,0,0,0,0,21,25,0,0,0,0,,,0,,,0,0,6e-06,9.2.8,0,0,0,0,0,,false,0,0,0,1739909128275000000,0,ROLE,c0cd84afebf744bbb9dae1cdfd4aa21f,2,c0cd84afebf744bbb9dae1cdfd4aa21f,1,,1,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571c6,"describe table ""SALES_DW"".""DBT_PROJECT"".""FSALES""",26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:28.094 -0800,2025-02-18 12:05:28.123 -0800,29,0,0,0,629,0,,0,0,0,0,0,0,0,0,0,0,27,2,0,0,0,0,,,0,,,0,0,4e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,a4f6ff4db85b42977bad2c366b79791a,2,a4f6ff4db85b42977bad2c366b79791a,1,,8,,,,,,,,
+01ba7b55-0000-da4c-0001-933e0005188a,describe table SALES_DW.DBT_PROJECT.fSales,26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:27.972 -0800,2025-02-18 12:05:28.017 -0800,45,0,0,0,629,0,,0,0,0,0,0,0,0,0,0,0,43,2,0,0,0,0,,,0,,,0,0,7e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,fba47c080a5a5c0d12026e01eafb5368,2,fba47c080a5a5c0d12026e01eafb5368,1,,8,,,,,,,,
+01ba7b55-0000-da3a-0001-933e0004f92e,describe table SALES_DW.DBT_PROJECT.fSales__dbt_tmp,26,SALES_DW,35,DBT_PROJECT,DESCRIBE,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:27.812 -0800,2025-02-18 12:05:27.886 -0800,74,0,0,0,629,0,,0,0,0,0,0,0,0,0,0,0,65,9,0,0,0,0,,,0,,,0,0,1.1e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,71bddd699379e3a6fe3a9fa9b4a846f8,2,71bddd699379e3a6fe3a9fa9b4a846f8,1,,8,,,,,,,,
+01ba7b55-0000-da2b-0001-933e0005084e,"create or replace  temporary view SALES_DW.DBT_PROJECT.fSales__dbt_tmp
+  
+   as (
+    -- models/fSales.sql
+
+
+
+WITH fSales AS
+(
+    SELECT
+        A.SKU,
+        A.STOREID,
+        C.ID_PRODUCT,
+        A.DATE,
+        A.SALES AS QUANTITY,
+        A.REVENUEUSD AS TOTAL_SALES,
+        CASE WHEN 
+            A.SKU= A.URL THEN 'OFFLINE' ELSE 'ONLINE'
+            END AS STORE_TYPE
+    FROM 
+        SALES_RAW.PUBLIC.PRODUCT_SALES_PERFORMANCE A
+    INNER JOIN
+        SALES_DW.DBT_PROJECT.dProduct C ON A.SKU = C.SKU AND A.TITLE = C.TITLE AND A.BRAND = C.BRAND
+)
+
+SELECT
+    A.*,
+    B.ID_SALES_CHANNEL AS ID_SALES_CHANNEL
+FROM fSales A
+INNER JOIN
+SALES_DW.DBT_PROJECT.dSalesChannel B ON A.STORE_TYPE = B.STORE_TYPE
+
+ 
+
+
+WHERE DATE > (SELECT MAX(DATE) FROM SALES_DW.DBT_PROJECT.fSales)
+
+
+  );",26,SALES_DW,35,DBT_PROJECT,CREATE_VIEW,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:27.476 -0800,2025-02-18 12:05:27.735 -0800,259,0,0,0,46,0,,0,0,0,0,0,0,0,0,0,0,134,125,0,0,0,0,,,0,,,0,0,3.9e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,cc270bcd3cd209f7d850fa8e96031800,2,cc270bcd3cd209f7d850fa8e96031800,1,,1,,,,,,,,
+01ba7b55-0000-da0f-0001-933e0004c9c6,"create or replace   view SALES_DW.DBT_PROJECT.dSalesChannel
+  
+   as (
+    -- models/dSalesChannel.sql
+
+WITH dSalesChannel AS (
+    SELECT DISTINCT
+        CASE 
+            WHEN SKU = URL THEN 'OFFLINE' 
+            ELSE 'ONLINE' 
+        END AS STORE_TYPE
+    FROM SALES_RAW.PUBLIC.PRODUCT_SALES_PERFORMANCE
+)
+SELECT 
+    ROW_NUMBER() OVER(ORDER BY STORE_TYPE ASC) AS ID_SALES_CHANNEL,
+    STORE_TYPE
+FROM dSalesChannel
+  );",26,SALES_DW,35,DBT_PROJECT,CREATE_VIEW,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:27.210 -0800,2025-02-18 12:05:27.347 -0800,137,0,0,0,44,0,,0,0,0,0,0,0,0,0,0,0,63,74,0,0,0,0,,,0,,,0,0,1.8e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,38170b2d8c7e666875740084342745ac,2,38170b2d8c7e666875740084342745ac,1,,1,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e00046ff6,"create or replace   view SALES_DW.DBT_PROJECT.dProduct
+  
+   as (
+    -- models/dProduct.sql
+
+WITH source_data AS (
+    SELECT 
+        SKU,
+        TITLE,
+        BRAND
+    FROM SALES_RAW.PUBLIC.PRODUCT_SALES_PERFORMANCE
+)
+
+SELECT
+    ROW_NUMBER() OVER(ORDER BY SKU, TITLE, BRAND) AS ID_PRODUCT,
+    SKU,
+    TITLE,
+    BRAND
+FROM source_data
+GROUP BY
+    SKU,
+    TITLE,
+    BRAND
+  );",26,SALES_DW,35,DBT_PROJECT,CREATE_VIEW,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:26.944 -0800,2025-02-18 12:05:27.117 -0800,173,0,0,0,39,0,,0,0,0,0,0,0,0,0,0,0,66,107,0,0,0,0,,,0,,,0,0,2.5e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,e518b5a7d5127475894e902e792c116a,2,e518b5a7d5127475894e902e792c116a,1,,1,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571c2,"create or replace transient table SALES_DW.DBT_PROJECT.dLocation
+         as
+        (-- models/dLocation.sql
+
+WITH source_data AS (
+    SELECT
+        DISTINCT(STOREID) AS STORE_ID,
+        ZIP,
+        CITY,
+        STATE,
+        ADRESS
+    FROM SALES_RAW.PUBLIC.PRODUCT_SALES_PERFORMANCE
+)
+
+SELECT
+    STORE_ID,
+    ZIP,
+    CITY,
+    STATE,
+    ADRESS AS ADDRESS
+FROM source_data
+ORDER BY STORE_ID
+        );",26,SALES_DW,35,DBT_PROJECT,CREATE_TABLE_AS_SELECT,443369474281642,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,X-Small,STANDARD,1,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:21.927 -0800,2025-02-18 12:05:26.799 -0800,4872,45375488,0,70144,41,0,1521,1521,0,0,0,0,22,22,0,0,0,523,4263,86,0,0,0,,,0,,,0,0,0.000146,9.2.8,0,0,0,0,0,100,false,0,0,0,1739909122083000000,0,ROLE,adcc316b2668bd2f867ed60efd4934f7,2,adcc316b2668bd2f867ed60efd4934f7,1,,1,,,,,,,,
+01ba7b55-0000-da0f-0001-933e0004c9c2,show objects in SALES_DW.SCD_HISTORY limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474281638,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:21.441 -0800,2025-02-18 12:05:21.526 -0800,85,0,0,0,136,0,,0,0,0,0,0,0,0,0,0,0,61,24,0,0,0,0,,,0,,,0,0,1.3e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,d02b9546b991ec5e61d3ef2722516ed0,2,d02b9546b991ec5e61d3ef2722516ed0,1,,1,,,,,,,,
+01ba7b55-0000-d9fc-0001-933e00046ff2,show objects in SALES_DW.DBT_PROJECT limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474281638,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:21.300 -0800,2025-02-18 12:05:21.374 -0800,74,0,0,0,610,0,,0,0,0,0,0,0,0,0,0,0,46,28,0,0,0,0,,,0,,,0,0,1.1e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,0703bcf67298056d4056a5292eef08f9,2,0703bcf67298056d4056a5292eef08f9,1,,5,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571be,show objects in SALES_DW.CONSUMPTION limit 10000;,26,SALES_DW,35,DBT_PROJECT,SHOW,443369474281638,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:21.139 -0800,2025-02-18 12:05:21.214 -0800,75,0,0,0,641,0,,0,0,0,0,0,0,0,0,0,0,32,43,0,0,0,0,,,0,,,0,0,1.1e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,b7addfd413ddb5e1b6cb5ed6c7c6dd53,2,b7addfd413ddb5e1b6cb5ed6c7c6dd53,1,,5,,,,,,,,
+01ba7b55-0000-da6e-0001-933e000571ba,"show terse schemas in database SALES_DW
+    limit 10000",26,SALES_DW,35,DBT_PROJECT,SHOW,443369474257082,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:20.572 -0800,2025-02-18 12:05:20.635 -0800,63,0,0,0,271,0,,0,0,0,0,0,0,0,0,0,0,50,13,0,0,0,0,,,0,,,0,0,9e-06,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,7c3bc0ae02aebbb983de7d1d895682ed,2,7c3bc0ae02aebbb983de7d1d895682ed,1,,5,,,,,,,,
+01ba7b55-0000-da4c-0001-933e00051886,"show terse schemas in database SALES_DW
+    limit 10000",26,SALES_DW,35,DBT_PROJECT,SHOW,443369474257082,OSCARFANTOZZI89,ACCOUNTADMIN,7,COMPUTE_WH,,STANDARD,,dbt_query_performance_test,SUCCESS,,,2025-02-18 12:05:20.439 -0800,2025-02-18 12:05:20.506 -0800,67,0,0,0,271,0,,0,0,0,0,0,0,0,0,0,0,60,7,0,0,0,0,,,0,,,0,0,1e-05,9.2.8,0,0,0,0,0,,false,0,0,0,0,0,ROLE,7c3bc0ae02aebbb983de7d1d895682ed,2,7c3bc0ae02aebbb983de7d1d895682ed,1,,5,,,,,,,,

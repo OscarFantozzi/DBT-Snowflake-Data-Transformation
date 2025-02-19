@@ -1,0 +1,18 @@
+
+SELECT
+    A.DATE,
+    A.STOREID,
+    B.STATE,
+    C.BRAND,
+    A.TOTAL_SALES,
+    SUM(A.TOTAL_SALES) OVER(
+        PARTITION BY A.STOREID
+        ORDER BY A.DATE
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS CUM_SUM
+FROM {{ ref('fSales') }} A
+LEFT JOIN {{ ref('dLocation') }} B 
+    ON A.STOREID = B.STORE_ID
+LEFT JOIN {{ ref('dProduct') }} C 
+    ON C.ID_PRODUCT = A.ID_PRODUCT
+

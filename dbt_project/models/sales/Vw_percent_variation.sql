@@ -1,0 +1,27 @@
+
+WITH sku_table AS (
+    SELECT
+        B.ID_PRODUCT,
+        C.STORE_TYPE,
+        SUM(A.TOTAL_SALES) AS TOTAL_SALES,
+        LAG(SUM(A.TOTAL_SALES)) OVER(PARTITION BY B.ID_PRODUCT ORDER BY C.STORE_TYPE) AS previous_sku,
+        CASE 
+            WHEN C.STORE_TYPE = 'ONLINE' THEN SUM(A.TOTAL_SALES)
+            ELSE NULL
+        END AS ACTUAL_ONLINE
+    FROM {{ ref('fSales') }} A
+    INNER JOIN {{ ref('dProduct') }} B
+        ON A.ID_PRODUCT = B.ID_PRODUCT
+    INNER JOIN {{ ref('dSalesChannel') }} C
+        ON C.ID_SALES_CHANNEL = A.ID_SALES_CHANNEL
+    GROUP BY
+        B.ID_PRODUCT,
+        C.STORE_TYPE
+)
+
+SELECT
+    S.ID_PRODUCT,
+    S.STORE_TYPE,
+    S.TOTAL_SALES,
+    ROUND((S.ACTUAL_ONLINE - S.PREVIOUS_SKU) / S.PREVIOUS_SKU * 100, 2) AS PERCENTAGE_VAR
+FROM sku_table S

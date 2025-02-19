@@ -1,0 +1,18 @@
+version: 2
+sources:
+  - name: sales_raw
+    database: SALES_RAW
+    schema: PUBLIC
+    tables:
+      - name: PSP
+        identifier: PRODUCT_SALES_PERFORMANCE
+
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - STOREID
+                - DATE
+                - SKU
+                
+                
+                

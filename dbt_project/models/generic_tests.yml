@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  # dProduct model tests
+  - name: dProduct
+    description: "Product dimension table"
+    columns:
+      - name: ID_PRODUCT
+        description: "unique identifier for the product"
+        tests:
+          - unique   # ensures no duplicate product IDs
+          - not_null # ensures every product has an ID
+
+      - name: SKU
+        description: "Stock Keeping Unit, a unique identifier for each product"
+        tests:
+          - unique   # ensures SKU is unique
+          - not_null # ensures SKU is not null
+
+      - name: BRAND
+        description: "Brand of the product"
+        tests:
+          - not_null # ensures brand field is always filled
+
+      - name: TITLE
+        description: "Product name"
+        tests:
+          - not_null # ensures product title is provided
+
+  # dSalesChannel model tests
+  - name: dSalesChannel
+    description: "Sales channels dimension table"
+    columns:
+      - name: ID_SALES_CHANNEL
+        description: "Unique identifier for sales channels"
+        tests:
+          - unique   # ensures each sales channel has a unique ID
+          - not_null # ensures sales channel ID is always present
+
+      - name: STORE_TYPE
+        description: "Sales channel type (ONLINE or OFFLINE)"
+        tests:
+          - accepted_values:
+              values: ['ONLINE', 'OFFLINE'] # enly allows these two values
+
+  # dLocation model tests
+  - name: dLocation
+    description: "Location dimension table"
+    columns:
+      - name: STORE_ID
+        description: "Unique store identifier"
+        tests:
+          - unique   # ensures each store has a unique ID
+          - not_null # ensures store ID is always filled
+
+      - name: CITY
+        description: "City where the store is located"
+        tests:
+          - not_null # ensures every store has a city
+
+      - name: STATE
+        description: "State where the store is located"
+        tests:
+          - not_null # ensures every store has a state
+
+  # fSales fact table tests
+  - name: fSales
+    description: "Fact table containing sales transactions"
+    columns:
+      - name: SKU
+        description: "SKU of the sold product"
+        tests:
+          - relationships:
+              to: ref('dProduct')
+              field: SKU # ensures SKU exists in the product table
+
+      - name: STORE_ID
+        description: "Store where the transaction occurred"
+        tests:
+          - relationships:
+              to: ref('dLocation')
+              field: STORE_ID # ensures store exists in location table
+
+      - name: ID_SALES_CHANNEL
+        description: "Sales channel used in the transaction"
+        tests:
+          - relationships:
+              to: ref('dSalesChannel')
+              field: ID_SALES_CHANNEL # ensures sales channel is valid
+
+      - name: TOTAL_SALES
+        description: "Total revenue of the transaction"
+        tests:
+          - not_null   # ensures total sales value is always present
+          - positive_value # eustom test: Ensures total sales are greater than 0
+
+  # Singular test to check if there are sales records with zero revenue
+  - name: zero_revenue_check
+    description: "Identifies sales records where revenue is zero"
+    tests:
+      - test_zero_revenue # custom test created as a singular test
